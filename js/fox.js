@@ -41,8 +41,8 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     },
     head: {
         origin: origin,
-        headWidth: headWidth,
-        headHeight:headHeight
+        width: headWidth,
+        height: headHeight
     },
     ears: ears,
     eyes: eyes,
