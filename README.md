@@ -1,4 +1,3 @@
-# Luke's Profile Foxes
+# All the Foxes
 
 Requires installing cairo
-and node-gyp
