@@ -4,12 +4,9 @@ var IMG_WIDTH = 64;
 var IMG_HEIGHT = 64;
 
 // move to helper function
-var Point = function (x, y) {
-  return {
-    x: x,
-    y: y
-  };
-};
+var genBetween = function (min, max) {
+  return min + (max - min) * gen();
+}
 
 var randomFox = (function () {
 
@@ -20,18 +17,32 @@ var randomFox = (function () {
   var height = IMG_HEIGHT / 2;
 
   var ears = (function () {
-    // TODO: generate stuff
+    var offsetX = genBetween(0, width/2);
     return {
       left: {
-        x: null
+        x: origin.x + (width/2) - offsetX,
+        y: origin.y
       },
       right: {
-        x: null
+        x: origin.x + (width/2) + offsetX,
+        y: origin.y
       }
     };
-  });
+  }());
+
+  var eyes = (function () {
+    // TODO: generate stuff
+    return {
+
+    };
+  }());
 
   return {
+    shape: {
+        origin: origin,
+        width: width,
+        height: height
+    },
     ears: ears,
     eyes: eyes,
     nose: nose,
