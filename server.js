@@ -133,6 +133,29 @@ var circle = function(c){
     return true;
 };
 
+function writeFoxesToDisk (width, height, n=10) {
+    var fileNames = [];
+    for (var i = 0; i < n; i++) {
+        var width = 200;
+        var height = 200;
+        var Image = Canvas.Image;
+        var canvas = new Canvas(width, height);
+        var ctx = canvas.getContext('2d');
+        var fox = Fox(width, height);
+        renderFox(canvas, fox);
+        var img = new Buffer(canvas.toDataURL(), 'base64');
+        var fileName = "fox" + Math.floor(Math.random() * 10000) + ".png";
+        var filePath = __dirname + '/images/' + fileName;
+
+        fs.writeFile(filePath, canvas.toBuffer(), function(err) {
+            if (err) console.log('error', err);
+        });
+
+        fileNames.push(fileName);
+    }
+    return fileNames;
+};
+
 var Canvas = require('canvas');
 var express = require('express');
 var fs = require('fs');
@@ -142,25 +165,9 @@ var app = express();
 app.use(express.static(__dirname + '/images'));
 
 app.get('/', function(req, res) {
-
-    var width = 200;
-    var height = 200;
-    var Canvas = require('canvas');
-    var Image = Canvas.Image;
-    var canvas = new Canvas(width, height);
-    var ctx = canvas.getContext('2d');
-    var fox = Fox(width, height);
-    console.log("fox", fox);
-    renderFox(canvas, fox);
-    var img = new Buffer(canvas.toDataURL(), 'base64');
-    var fileName = "fox" + Math.floor(Math.random() * 10000) + ".png";
-
-    fs.writeFile(__dirname + '/images/' + fileName, canvas.toBuffer(), function(err) {
-        console.log('error', err);
-    });
-
-    console.log(fileName);
-    res.redirect(301, fileName);
+    var fileNames = writeFoxesToDisk(300, 300, 30);
+    var images = fileNames.map(fileName => '<img src="/' + fileName + '"/>');
+    res.send(images.join(''));
 });
 
 
