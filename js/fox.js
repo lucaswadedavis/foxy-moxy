@@ -13,7 +13,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   var ears = (function () {
     var offsetX = chance.floating({min: 0.1 * headWidth, max: 0.4 * headWidth});
     var angle = chance.floating({min: 0, max: Math.PI / 6});
-    // TODO: size, angle?
+    // TODO: size
     return {
       left: {
         x: origin.x + (headWidth/2) - offsetX,
@@ -33,8 +33,20 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   }());
 
   var eyes = (function () {
-    // TODO: y, offsetX, color
-    return null;
+    // TODO: color
+    var offsetY = chance.floating({min: -0.05 * headHeight, max: 0.05 * headHeight});
+    var offsetX = chance.floating({min: 0.2 * headWidth, max: 0.25 * headWidth});
+
+    return {
+      left: {
+        x: origin.x + (headWidth/2) - offsetX,
+        y: origin.y + (headHeight/2) + offsetY
+      },
+      right: {
+        x: origin.x + (headWidth/2) + offsetX,
+        y: origin.y + (headHeight/2) + offsetY
+      }
+    }
   }());
 
   return {

@@ -39,10 +39,12 @@ var renderFox = function (canvas, opts) {
     var height = opts.canvas.height;
     var ctx = canvas.getContext('2d');
 
-    // draw head
-    renderHead(ctx, opts.head);
     // draw ears
     renderEars(ctx, opts.ears);
+    // draw head
+    renderHead(ctx, opts.head);
+    // draw eyes
+    renderEyes(ctx, opts.eyes);
     // draw cheeks
     // draw eyes
     // draw nose
@@ -53,7 +55,7 @@ function renderHead(ctx, opts) {
     ctx.save();
     ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
     ctx.rotate(Math.PI / 4);
-    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height);
+    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, "orange");
     ctx.restore();
 }
 
@@ -65,23 +67,28 @@ function renderEars(ctx, opts) {
     ctx.save();
     ctx.translate(offset.x, offset.y);
     ctx.rotate(-opts.left.angle);
-    drawEllipseByCenter(ctx, opts.left.x - offset.x, opts.left.y - offset.y, opts.left.width, opts.left.height);
+    drawEllipseByCenter(ctx, opts.left.x - offset.x, opts.left.y - offset.y, opts.left.width, opts.left.height, "orange");
     ctx.restore();
 
     ctx.save();
     ctx.translate(offset.x, offset.y);
     ctx.rotate(-opts.right.angle);
-    drawEllipseByCenter(ctx, opts.right.x - offset.x, opts.right.y - offset.y, opts.right.width, opts.right.height);
+    drawEllipseByCenter(ctx, opts.right.x - offset.x, opts.right.y - offset.y, opts.right.width, opts.right.height, "orange");
     ctx.restore();
 }
 
-function drawEllipseByCenter(ctx, cx, cy, w, h) {
-  console.log("ellipse coords", cx, cy, w, h);
-  drawEllipse(ctx, cx - w/2.0, cy - h/2.0, w, h);
+function renderEyes(ctx, opts) {
+    drawEllipseByCenter(ctx, opts.left.x, opts.left.y, 5, 10, "black", 1);
+    drawEllipseByCenter(ctx, opts.right.x, opts.right.y, 5, 10, "black", 1);
 }
 
-function drawEllipse(ctx, x, y, w, h) {
-  var kappa = .3,
+function drawEllipseByCenter(ctx, cx, cy, w, h, color, fillColor, kappa) {
+  console.log("ellipse coords", cx, cy, w, h);
+  drawEllipse(ctx, cx - w/2.0, cy - h/2.0, w, h, color, fillColor, kappa);
+}
+
+function drawEllipse(ctx, x, y, w, h, color, fillColor, kappa) {
+  var kappa = kappa || 0.3,
       ox = (w / 2) * kappa, // control point offset horizontal
       oy = (h / 2) * kappa, // control point offset vertical
       xe = x + w,           // x-end
@@ -89,12 +96,20 @@ function drawEllipse(ctx, x, y, w, h) {
       xm = x + w / 2,       // x-middle
       ym = y + h / 2;       // y-middle
 
+  if (color) {
+    ctx.strokeStyle = color;
+  }
   ctx.beginPath();
   ctx.moveTo(x, ym);
   ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
   ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
   ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
   ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+  var fillColor = fillColor || color;
+  if (fillColor) {
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+  }
   //ctx.closePath(); // not used correctly, see comments (use to close off open path)
   ctx.stroke();
 }
