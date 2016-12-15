@@ -38,12 +38,45 @@ var renderFox = function (canvas, opts) {
     var width = opts.canvas.width;
     var height = opts.canvas.height;
     var ctx = canvas.getContext('2d');
-    ctx.beginPath();
 
-    drawEllipseByCenter(ctx, width/2, height/2, opts.head.width, opts.head.height);
+    // draw head
+    renderHead(ctx, opts.head);
+    // draw ears
+    renderEars(ctx, opts.ears);
+    // draw cheeks
+    // draw eyes
+    // draw nose
+    // draw mouth
 };
 
+function renderHead(ctx, opts) {
+    ctx.save();
+    ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
+    ctx.rotate(Math.PI / 4);
+    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height);
+    ctx.restore();
+}
+
+function renderEars(ctx, opts) {
+    var offset = {
+        x: ctx.canvas.width/2,
+        y: ctx.canvas.height/2
+    }
+    ctx.save();
+    ctx.translate(offset.x, offset.y);
+    ctx.rotate(-opts.left.angle);
+    drawEllipseByCenter(ctx, opts.left.x - offset.x, opts.left.y - offset.y, opts.left.width, opts.left.height);
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(offset.x, offset.y);
+    ctx.rotate(-opts.right.angle);
+    drawEllipseByCenter(ctx, opts.right.x - offset.x, opts.right.y - offset.y, opts.right.width, opts.right.height);
+    ctx.restore();
+}
+
 function drawEllipseByCenter(ctx, cx, cy, w, h) {
+  console.log("ellipse coords", cx, cy, w, h);
   drawEllipse(ctx, cx - w/2.0, cy - h/2.0, w, h);
 }
 
@@ -102,7 +135,7 @@ app.get('/', function(req, res) {
     var canvas = new Canvas(width, height);
     var ctx = canvas.getContext('2d');
     var fox = Fox(width, height);
-    console.log(fox);
+    console.log("fox", fox);
     renderFox(canvas, fox);
     var img = new Buffer(canvas.toDataURL(), 'base64');
     var fileName = "fox" + Math.floor(Math.random() * 10000) + ".png";

@@ -1,10 +1,6 @@
 // TODO: use query params for these
-var gen = require('random-seed');
-
-// move to helper function
-var genBetween = function (min, max) {
-  return min + (max - min) * gen();
-}
+var Chance = require('chance');
+var chance = new Chance();
 
 var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
 
@@ -15,16 +11,23 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   var headHeight = IMG_HEIGHT / 2;
 
   var ears = (function () {
-    var offsetX = genBetween(0, headWidth/2);
+    var offsetX = chance.floating({min: 0, max: headWidth/2});
+    var angle = chance.floating({min: 0, max: Math.PI / 6});
     // TODO: size, angle?
     return {
       left: {
         x: origin.x + (headWidth/2) - offsetX,
-        y: origin.y
+        y: origin.y + (0.15 * headHeight),
+        angle: angle,
+        width: 0.4 * headWidth,
+        height: 0.6 * headHeight 
       },
       right: {
         x: origin.x + (headWidth/2) + offsetX,
-        y: origin.y
+        y: origin.y + (0.15 * headHeight),
+        angle: -angle,
+        width: 0.4 * headWidth,
+        height: 0.6 * headHeight 
       }
     };
   }());
