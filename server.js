@@ -53,10 +53,21 @@ var renderFox = function (canvas, opts) {
 };
 
 function renderHead(ctx, opts) {
+
     ctx.save();
     ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
     ctx.rotate(Math.PI / 4);
-    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, opts.color, null, opts.kappa);
+    var tempCanvas = new Canvas(ctx.canvas.width, ctx.canvas.height);
+    var tempCtx = tempCanvas.getContext('2d');
+    tempCtx.save();
+    tempCtx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
+    tempCtx.rotate(Math.PI / 4);
+    tempCtx.fillStyle = opts.color;
+    tempCtx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    tempCtx.fill();
+    drawEllipseByCenter(tempCtx, ctx.canvas.width / 2, ctx.canvas.height, 0.1 * ctx.canvas.width, 0 * ctx.canvas.height, '#fff', null, 0.5);
+    var pattern = ctx.createPattern(tempCanvas);
+    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, opts.color, pattern, opts.kappa);
     ctx.restore();
 }
 

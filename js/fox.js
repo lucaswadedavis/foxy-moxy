@@ -15,7 +15,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   var headHeight = IMG_HEIGHT / 2;
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
-  var hue = chance.integer({min: 70, max: 90});
+  var hue = chance.integer({min: 5, max: 55});
   var saturation = chance.integer({min: 70, max: 90});
   var lightness = chance.integer({min: 40, max: 60});
   var headColor = hsl(hue, saturation, lightness);
