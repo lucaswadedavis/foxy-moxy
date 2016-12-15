@@ -1,3 +1,4 @@
+var Fox = require('./js/fox.js');
 var davis = require('./js/davis.js');
 var geo = require('./js/geo.js');
 
@@ -10,7 +11,7 @@ var ngon = function (c) {
     var r=c.r || 500;
     if (n%2==0){
         var rotation=360/(n*2)*davis.random(n*2);
-    } 
+    }
     else {
         var rotation=90+(180*davis.random(2));
     };
@@ -33,70 +34,19 @@ var ngon = function (c) {
     return true;
 };
 
-var textIcon = function (canvas, width, height) {
+var renderFox = function (canvas, opts) {
+    var width = opts.canvas.width;
+    var height = opts.canvas.height;
     var ctx = canvas.getContext('2d');
     ctx.beginPath();
 
-    var color=davis.randomColor();
-    var gradient=ctx.createLinearGradient(0,0,0,height);
-    gradient.addColorStop(0,color);
-    gradient.addColorStop(1,davis.pick([color,davis.randomColor(),"#000","#fff",davis.alpha(color,0)]));
-    ctx.fillStyle=gradient;
-    ctx.fillRect(0,0,width,height);
-
-
-    for (var j=0;j<davis.random(4);j++){
-        var r=davis.random(width/2);
-        var rf=davis.random(width/2);
-        var color=davis.randomColor();
-        davis.maybe(2,3,function(){color=davis.randomColor("grey");});
-        var lw=1+davis.random(width/20);
-        var steps=1+davis.random(30);
-        var incrementMod=davis.random(3)*90;
-        var n=davis.random(6);
-        var rotation=90*davis.random(3);
-        var fadeColor=davis.pick(["rgba(0,0,0,0)","rgba(255,255,255,0)"]);
-        var fadeRadius=Math.random();
-        davis.maybe(1,5,function(){fadeRadius=0;});
-        davis.maybe(1,5,function(){fadeRadius=false;});
-        for (var i=0;i<steps;i++){
-            var increment=i*360/steps;
-            var x=geo.getPoint(width/2,height/2,rf,increment+incrementMod).x2;
-            var y=geo.getPoint(width/2,height/2,rf,increment+incrementMod).y2;
-
-            circle({
-                n:n,
-                gradient:true,
-                context:ctx,
-                x:x,
-                y:y,
-                r:r,
-                rotation:rotation,
-                lineWidth:lw,
-                color:color,
-                fadeColor:fadeColor,
-                fadeRadius:fadeRadius
-            });	
-        }
-    }
-
-    var radialCanvas = new Canvas(width, height);
-    var ctx2 = radialCanvas.getContext('2d');
-    radial(ctx2, width, height);
-    var pattern = ctx.createPattern(radialCanvas);
-    ctx.clearRect(0, 0, width, height);
-
-    ngon({
-        n:3+davis.random(4),
-        gradient:true,
+    circle({
+        gradient:false,
         context:ctx,
-        x:width/2,
-        y:height/2,
-        r:width/4+davis.random(width/4),
-        fill:pattern,
-        lineWidth:davis.random(width/15)
-    });	
-
+        x: width/2,
+        y: height/2,
+        r: width/2,
+    });
 };
 
 
@@ -107,19 +57,14 @@ var circle = function(c){
     var x=c.x || 500;
     var y=c.y || x;
     var r=c.r || 10;
-    var color=c.color || davis.randomColor("grey");
-    var fadeColor=c.fadeColor || "rgba(0,0,0,0)";
-    var fadeRadius=c.fadeRadius || Math.random();
     var cr=ctx.canvas.width/2;
-    var gradient=ctx.createRadialGradient(cr,cr,(fadeRadius*cr),cr,cr,cr);
-    gradient.addColorStop(0,color);
-    gradient.addColorStop(1,fadeColor);
     var lineWidth=c.lineWidth || 1;
     ctx.beginPath();
     ctx.arc(x,y,r,0,2*Math.PI);
-    ctx.strokeStyle=gradient;
     ctx.lineWidth=lineWidth;
 
+    ctx.fillStyle="red";
+    ctx.fill();
     ctx.stroke();
 
 
@@ -166,7 +111,7 @@ var radial = function(ctx,width,height){
                 color:color,
                 fadeColor:fadeColor,
                 fadeRadius:fadeRadius
-            });	
+            });
         }
     }
 };
@@ -179,7 +124,7 @@ var app = express();
 
 app.use(express.static(__dirname + '/images'));
 
-app.get('/:width', function(req, res) {
+app.get('/', function(req, res) {
 
     var width = 200;
     var height = 200;
@@ -187,7 +132,9 @@ app.get('/:width', function(req, res) {
     var Image = Canvas.Image;
     var canvas = new Canvas(width, height);
     var ctx = canvas.getContext('2d');
-    textIcon(canvas, width, height);
+    var fox = Fox(width, height);
+    console.log(fox);
+    renderFox(canvas, fox);
     var img = new Buffer(canvas.toDataURL(), 'base64');
     var fileName = "fox" + Math.floor(Math.random() * 10000) + ".png";
 
