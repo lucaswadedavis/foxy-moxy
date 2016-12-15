@@ -1,0 +1,24 @@
+{
+  "name": "icogaru",
+  "version": "1.0.0",
+  "description": "Iconic ============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lucaswadedavis/icogaru.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lucaswadedavis/icogaru/issues"
+  },
+  "homepage": "https://github.com/lucaswadedavis/icogaru#readme",
+  "dependencies": {
+    "canvas": "^1.6.2",
+    "express": "^4.14.0",
+    "node-gyp": "^3.4.0"
+  }
+}
