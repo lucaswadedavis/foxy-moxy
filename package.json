@@ -19,6 +19,7 @@
   "dependencies": {
     "canvas": "^1.6.2",
     "express": "^4.14.0",
-    "node-gyp": "^3.4.0"
+    "node-gyp": "^3.4.0",
+    "random-seed": "^0.3.0"
   }
 }
