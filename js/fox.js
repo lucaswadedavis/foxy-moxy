@@ -2,6 +2,10 @@
 var Chance = require('chance');
 var chance = new Chance();
 
+var hsl = function (h, s, l) {
+  return "hsl(" + h + "," + s + "%, " + l + "%)";
+}
+
 var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
 
   // head top left corner
@@ -9,12 +13,20 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   // TODO: head headWidth and height
   var headWidth = IMG_WIDTH / 2;
   var headHeight = IMG_HEIGHT / 2;
+  var kappa = chance.floating({min: 0.2, max: 0.45})
+
+  var hue = chance.integer({min: 70, max: 90});
+  var saturation = chance.integer({min: 70, max: 90});
+  var lightness = chance.integer({min: 40, max: 60});
+  var headColor = hsl(hue, saturation, lightness);
 
   var ears = (function () {
     var offsetX = chance.floating({min: 0.1 * headWidth, max: 0.4 * headWidth});
-    var angle = chance.floating({min: 0, max: Math.PI / 6});
+    var angle = chance.floating({min: 0, max: 0.2 * Math.PI});
     // TODO: size
     return {
+      color: headColor,
+      kappa: kappa,
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (0.15 * headHeight),
@@ -35,9 +47,11 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   var eyes = (function () {
     // TODO: color
     var offsetY = chance.floating({min: -0.05 * headHeight, max: 0.05 * headHeight});
-    var offsetX = chance.floating({min: 0.2 * headWidth, max: 0.25 * headWidth});
+    var offsetX = chance.floating({min: 0.13 * headWidth, max: 0.25 * headWidth});
 
     return {
+      height: 0.1 * headHeight,
+      width: 0.05 * headWidth,
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (headHeight/2) + offsetY
@@ -49,6 +63,15 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     }
   }());
 
+  var nose = (function (eyes) {
+    return {
+      x: origin.x + (headWidth/2),
+      y: (eyes.left.y + 0.3 * (origin.y + headHeight - eyes.left.y)),
+      width: 0.05 * headWidth,
+      height: 0.05 * headHeight
+    }
+  }(eyes));
+
   return {
     canvas: {
       height: IMG_HEIGHT,
@@ -57,11 +80,14 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     head: {
         origin: origin,
         width: headWidth,
-        height: headHeight
+        height: headHeight,
+        color: headColor,
+        kappa: kappa,
+        maskColor: hsl(hue, saturation, 95)
     },
     ears: ears,
     eyes: eyes,
-    // nose: nose,
+    nose: nose,
     // mouth: mouth
   };
 };

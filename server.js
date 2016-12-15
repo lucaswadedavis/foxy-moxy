@@ -48,6 +48,7 @@ var renderFox = function (canvas, opts) {
     // draw cheeks
     // draw eyes
     // draw nose
+    renderNose(ctx, opts.nose);
     // draw mouth
 };
 
@@ -55,7 +56,7 @@ function renderHead(ctx, opts) {
     ctx.save();
     ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);
     ctx.rotate(Math.PI / 4);
-    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, "orange");
+    drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, opts.color, null, opts.kappa);
     ctx.restore();
 }
 
@@ -67,19 +68,23 @@ function renderEars(ctx, opts) {
     ctx.save();
     ctx.translate(offset.x, offset.y);
     ctx.rotate(-opts.left.angle);
-    drawEllipseByCenter(ctx, opts.left.x - offset.x, opts.left.y - offset.y, opts.left.width, opts.left.height, "orange");
+    drawEllipseByCenter(ctx, opts.left.x - offset.x, opts.left.y - offset.y, opts.left.width, opts.left.height, opts.color, null, opts.kappa);
     ctx.restore();
 
     ctx.save();
     ctx.translate(offset.x, offset.y);
     ctx.rotate(-opts.right.angle);
-    drawEllipseByCenter(ctx, opts.right.x - offset.x, opts.right.y - offset.y, opts.right.width, opts.right.height, "orange");
+    drawEllipseByCenter(ctx, opts.right.x - offset.x, opts.right.y - offset.y, opts.right.width, opts.right.height, opts.color, null, opts.kappa);
     ctx.restore();
 }
 
 function renderEyes(ctx, opts) {
-    drawEllipseByCenter(ctx, opts.left.x, opts.left.y, 5, 10, "black", 1);
-    drawEllipseByCenter(ctx, opts.right.x, opts.right.y, 5, 10, "black", 1);
+    drawEllipseByCenter(ctx, opts.left.x, opts.left.y, opts.width, opts.height, "black", null, 0.5);
+    drawEllipseByCenter(ctx, opts.right.x, opts.right.y, opts.width, opts.height, "black", null, 0.5);
+}
+
+function renderNose(ctx, opts) {
+    drawEllipseByCenter(ctx, opts.x, opts.y, opts.width, opts.height, "black", null, 0.5);
 }
 
 function drawEllipseByCenter(ctx, cx, cy, w, h, color, fillColor, kappa) {
@@ -136,8 +141,6 @@ var circle = function(c){
 function writeFoxesToDisk (width, height, n=10) {
     var fileNames = [];
     for (var i = 0; i < n; i++) {
-        var width = 200;
-        var height = 200;
         var Image = Canvas.Image;
         var canvas = new Canvas(width, height);
         var ctx = canvas.getContext('2d');
