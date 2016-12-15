@@ -18,6 +18,7 @@ var randomFox = (function () {
 
   var ears = (function () {
     var offsetX = genBetween(0, width/2);
+    // TODO: size, angle?
     return {
       left: {
         x: origin.x + (width/2) - offsetX,
@@ -31,9 +32,9 @@ var randomFox = (function () {
   }());
 
   var eyes = (function () {
-    // TODO: generate stuff
+    // TODO: y, offsetX, color
     return {
-
+      
     };
   }());
 
