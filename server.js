@@ -39,6 +39,8 @@ var renderFox = function (canvas, opts) {
     var height = opts.canvas.height;
     var ctx = canvas.getContext('2d');
 
+    ctx.fillStyle = opts.canvas.color;
+    ctx.fillRect(0, 0, width, height);
     // draw ears
     renderEars(ctx, opts.ears);
     // draw head
@@ -60,7 +62,7 @@ function renderHead(ctx, opts) {
     drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, opts.color, null, opts.kappa);
     ctx.restore();
     ctx.clip();
-    drawEllipseByCenter(ctx, ctx.canvas.width / 2, ctx.canvas.height, ctx.canvas.width, 0.9 * ctx.canvas.height, '#fff', '#fff', 0.5);
+    drawEllipseByCenter(ctx, ctx.canvas.width / 2, ctx.canvas.height, opts.maskWidth, opts.maskHeight, '#fff', '#fff', 0.5);
 }
 
 function renderEars(ctx, opts) {
@@ -87,7 +89,17 @@ function renderEyes(ctx, opts) {
 }
 
 function renderNose(ctx, opts) {
-    drawEllipseByCenter(ctx, opts.x, opts.y, opts.width, opts.height, "black", null, 0.5);
+
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(opts.x - opts.width/2, opts.y - opts.height/2);
+  ctx.bezierCurveTo(opts.x - opts.width/2, opts.y - opts.height/2, opts.x, opts.y - opts.height, opts.x + opts.width/2, opts.y - opts.height/2);
+  ctx.bezierCurveTo(opts.x + opts.width/2, opts.y - opts.height/2, opts.x + opts.width/2, opts.y + opts.height/2, opts.x, opts.y + opts.height/2);
+  ctx.bezierCurveTo(opts.x, opts.y + opts.height/2, opts.x - opts.width/2, opts.y + opts.height/2, opts.x - opts.width/2, opts.y - opts.height/2);
+    // drawEllipseByCenter(ctx, opts.x, opts.y, opts.width, opts.height, "black", null, 0.5);
+  ctx.fill();
+  //ctx.closePath(); // not used correctly, see comments (use to close off open path)
+  ctx.stroke();
 }
 
 function drawEllipseByCenter(ctx, cx, cy, w, h, color, fillColor, kappa) {
