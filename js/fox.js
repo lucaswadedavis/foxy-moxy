@@ -1,18 +1,22 @@
 // TODO: use query params for these
 var Chance = require('chance');
-var chance = new Chance();
 
 var hsl = function (h, s, l) {
   return "hsl(" + h + "," + s + "%, " + l + "%)";
 }
 
-var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
+var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
+  if (seed) {
+    chance = new Chance(seed);
+  } else {
+    chance = new Chance();
+  }
 
   // head top left corner
-  var origin = {x: IMG_WIDTH / 4, y: IMG_HEIGHT / 4};
   // TODO: head headWidth and height
-  var headWidth = IMG_WIDTH / 2;
-  var headHeight = IMG_HEIGHT / 2;
+  var headWidth = 0.65 * IMG_WIDTH;
+  var headHeight = 0.65 * IMG_HEIGHT;
+  var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: IMG_HEIGHT / 2 - headHeight / 2};
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
   var hue = chance.integer({min: 5, max: 50});
@@ -82,7 +86,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
       y: (nose.y + 0.15 * (origin.y + headHeight - nose.y)),
       width: 0.08 * headWidth,
       height: 0.04 * headWidth,
-      style: chance.pickone(['smirk', 'cat'])
+      style: chance.pickone(['smirk', 'cat', 'none'])
     }
   }(nose));
 

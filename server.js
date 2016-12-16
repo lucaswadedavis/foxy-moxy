@@ -106,6 +106,8 @@ function renderEyes(ctx, opts) {
         ctx.stroke();
         ctx.closePath();
         break;
+      case "none":
+        break;
     }
 }
 
@@ -228,7 +230,6 @@ app.get('/', function(req, res) {
     var images = fileNames.map(fileName => '<img src="/' + fileName + '"/>');
     res.send(images.join(''));
 });
-
 
 app.listen(process.env.PORT || 3000);
 console.log('listening on http://localhost:3000');
