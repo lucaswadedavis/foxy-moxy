@@ -75,7 +75,12 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
   return {
     canvas: {
       height: IMG_HEIGHT,
-      width: IMG_WIDTH
+      width: IMG_WIDTH,
+      color: hsl(
+        chance.integer({min:120, max:320}),
+        chance.integer({min:50, max:60}),
+        chance.integer({min:30, max:50})
+      )
     },
     head: {
         origin: origin,
