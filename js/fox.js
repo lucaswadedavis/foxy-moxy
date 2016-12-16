@@ -1,18 +1,22 @@
 // TODO: use query params for these
 var Chance = require('chance');
-var chance = new Chance();
 
 var hsl = function (h, s, l) {
   return "hsl(" + h + "," + s + "%, " + l + "%)";
 }
 
-var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
+var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
+  if (seed) {
+    chance = new Chance(seed);
+  } else {
+    chance = new Chance();
+  }
 
   // head top left corner
-  var origin = {x: IMG_WIDTH / 4, y: IMG_HEIGHT / 4};
   // TODO: head headWidth and height
-  var headWidth = IMG_WIDTH / 2;
-  var headHeight = IMG_HEIGHT / 2;
+  var headWidth = 0.65 * IMG_WIDTH;
+  var headHeight = 0.65 * IMG_HEIGHT;
+  var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: IMG_HEIGHT / 2 - headHeight / 2};
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
   var hue = chance.integer({min: 5, max: 50});
@@ -32,21 +36,21 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
         y: origin.y + (0.15 * headHeight),
         angle: angle,
         width: 0.4 * headWidth,
-        height: 0.6 * headHeight
+        height: 0.8 * headHeight
       },
       right: {
         x: origin.x + (headWidth/2) + offsetX,
         y: origin.y + (0.15 * headHeight),
         angle: -angle,
         width: 0.4 * headWidth,
-        height: 0.6 * headHeight
+        height: 0.8 * headHeight
       }
     };
   }());
 
   var eyes = (function () {
     // TODO: color
-    var offsetY = chance.floating({min: -0.05 * headHeight, max: 0.05 * headHeight});
+    var offsetY = chance.floating({min: -0.05 * headHeight, max: -0.025 * headHeight});
     var offsetX = chance.floating({min: 0.13 * headWidth, max: 0.25 * headWidth});
 
     var eyeHeight = chance.floating({min: 0.08 * headHeight, max: 0.13 * headHeight});
@@ -54,6 +58,8 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     return {
       height: eyeHeight,
       width: eyeHeight/2,
+      style: 'ellipse',
+      // style: chance.pickone(['ellipse', 'smiley']),
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (headHeight/2) + offsetY
@@ -69,10 +75,20 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     return {
       x: origin.x + (headWidth/2),
       y: (eyes.left.y + 0.3 * (origin.y + headHeight - eyes.left.y)),
-      width: 0.06 * headWidth,
-      height: 0.05 * headWidth
+      width: 0.04 * headWidth,
+      height: 0.03 * headWidth
     }
   }(eyes));
+
+  var mouth = (function (nose) {
+    return {
+      x: origin.x + (headWidth/2),
+      y: (nose.y + 0.15 * (origin.y + headHeight - nose.y)),
+      width: 0.08 * headWidth,
+      height: 0.04 * headWidth,
+      style: chance.pickone(['smirk', 'cat', 'none'])
+    }
+  }(nose));
 
   return {
     canvas: {
@@ -92,12 +108,12 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
         kappa: kappa,
         maskColor: hsl(hue, saturation, 95),
         maskWidth: chance.integer({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
-        maskHeight: chance.integer({min: 0.85 * IMG_HEIGHT, max: 1 * IMG_HEIGHT})
+        maskHeight: chance.integer({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
     },
     ears: ears,
     eyes: eyes,
     nose: nose,
-    // mouth: mouth
+    mouth: mouth
   };
 };
 
