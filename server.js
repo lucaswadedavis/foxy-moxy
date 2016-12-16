@@ -1,38 +1,8 @@
-var Fox = require('./js/fox.js');
-var davis = require('./js/davis.js');
-var geo = require('./js/geo.js');
+var fs = require('fs');
+var express = require('express');
+var Canvas = require('canvas');
 
-// var ngon = function (c) {
-//     var n=c.n || 3;
-//
-//     var ctx= c.context || false;
-//     var x=c.x || 500;
-//     var y=c.y || x;
-//     var r=c.r || 500;
-//     if (n%2==0){
-//         var rotation=360/(n*2)*davis.random(n*2);
-//     }
-//     else {
-//         var rotation=90+(180*davis.random(2));
-//     };
-//     rotation=c.rotation || rotation;
-//     var color=c.color || davis.randomColor("grey");
-//     var lineWidth=c.lineWidth || 1;
-//     var fill=c.fill || davis.randcomColor();
-//     ctx.beginPath();
-//     for (var i=0;i<n+2;i++){
-//         var nx=geo.getPoint(x,y,r,rotation+(i*360/n)).x2;
-//         var ny=geo.getPoint(x,y,r,rotation+(i*360/n)).y2;
-//         ctx.lineTo(nx,ny);
-//     }
-//     ctx.lineJoin='miter';
-//     ctx.strokeStyle=color;
-//     ctx.lineWidth=lineWidth;
-//     ctx.fillStyle=fill;
-//     ctx.fill();
-//     ctx.stroke();
-//     return true;
-// };
+var Fox = require('./js/fox.js');
 
 var renderFox = function (canvas, opts) {
     var width = opts.canvas.width;
@@ -216,10 +186,6 @@ function writeFoxesToDisk (width, height, n=10) {
     }
     return fileNames;
 };
-
-var Canvas = require('canvas');
-var express = require('express');
-var fs = require('fs');
 
 var app = express();
 
