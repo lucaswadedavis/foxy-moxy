@@ -15,7 +15,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
   // TODO: head headWidth and height
   var headWidth = 0.6 * IMG_WIDTH;
   var headHeight = 0.6 * IMG_HEIGHT;
-  var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: IMG_HEIGHT / 2 - headHeight / 2};
+  var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: 0.5 * IMG_HEIGHT - headHeight / 2};
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
   var hue = chance.integer({min: 5, max: 50});

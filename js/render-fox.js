@@ -10,7 +10,18 @@ var renderFox = function (canvas, opts) {
     renderEyes(ctx, opts.eyes);
     renderNose(ctx, opts.nose);
     renderMouth(ctx, opts.mouth);
+
+    shift_canvas(ctx, width, height, 0, 0.06 * height);
 };
+
+function shift_canvas(ctx, w, h, dx, dy) {
+  var topImage = ctx.getImageData(0, 0, w, h);
+  var bottomImage = ctx.getImageData(0, h - dy, w, h);
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.putImageData(bottomImage, 0, 0);
+  ctx.putImageData(topImage, dx, dy);
+}
 
 function renderHead(ctx, opts) {
     ctx.save();
