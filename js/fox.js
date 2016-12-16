@@ -1,4 +1,3 @@
-// TODO: use query params for these
 var Chance = require('chance');
 
 var hsl = function (h, s, l) {
@@ -14,8 +13,8 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
 
   // head top left corner
   // TODO: head headWidth and height
-  var headWidth = 0.65 * IMG_WIDTH;
-  var headHeight = 0.65 * IMG_HEIGHT;
+  var headWidth = 0.6 * IMG_WIDTH;
+  var headHeight = 0.6 * IMG_HEIGHT;
   var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: IMG_HEIGHT / 2 - headHeight / 2};
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
@@ -59,7 +58,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
       height: eyeHeight,
       width: eyeHeight/2,
       style: 'ellipse',
-      // style: chance.pickone(['ellipse', 'smiley']),
+      //style: chance.pickone(['ellipse', 'smiley']),
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (headHeight/2) + offsetY
@@ -74,18 +73,18 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
   var nose = (function (eyes) {
     return {
       x: origin.x + (headWidth/2),
-      y: (eyes.left.y + 0.3 * (origin.y + headHeight - eyes.left.y)),
-      width: 0.04 * headWidth,
-      height: 0.03 * headWidth
+      y: (eyes.left.y + chance.floating({min: 0.2, max: 0.4}) * (origin.y + headHeight - eyes.left.y)),
+      width: chance.floating({min: 0.03, max: 0.04}) * headWidth,
+      height: chance.floating({min: 0.03, max: 0.04}) * headWidth
     }
   }(eyes));
 
   var mouth = (function (nose) {
     return {
       x: origin.x + (headWidth/2),
-      y: (nose.y + 0.15 * (origin.y + headHeight - nose.y)),
-      width: 0.08 * headWidth,
-      height: 0.04 * headWidth,
+      y: (nose.y + chance.floating({min: 0.2, max: 0.35}) * (origin.y + headHeight - nose.y)),
+      width: chance.floating({min: 0.08, max: 0.15}) * headWidth,
+      height: chance.floating({min: 0.03, max: 0.06}) * headWidth,
       style: chance.pickone(['smirk', 'cat', 'none'])
     }
   }(nose));
@@ -107,8 +106,8 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
         color: headColor,
         kappa: kappa,
         maskColor: hsl(hue, saturation, 95),
-        maskWidth: chance.integer({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
-        maskHeight: chance.integer({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
+        maskWidth: chance.floating({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
+        maskHeight: chance.floating({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
     },
     ears: ears,
     eyes: eyes,

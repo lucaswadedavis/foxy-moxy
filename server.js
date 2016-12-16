@@ -29,7 +29,7 @@ var app = express();
 app.use(express.static(__dirname + '/images'));
 
 app.get('/', function(req, res) {
-    var fileNames = writeFoxesToDisk(200, 200, 30);
+    var fileNames = writeFoxesToDisk(400, 400, 30);
     var images = fileNames.map(fileName => '<img src="/' + fileName + '"/>');
     res.send(images.join(''));
 });
