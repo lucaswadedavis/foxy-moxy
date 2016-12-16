@@ -84,8 +84,28 @@ function renderEars(ctx, opts) {
 }
 
 function renderEyes(ctx, opts) {
-    drawEllipseByCenter(ctx, opts.left.x, opts.left.y, opts.width, opts.height, "black", null, 0.5);
-    drawEllipseByCenter(ctx, opts.right.x, opts.right.y, opts.width, opts.height, "black", null, 0.5);
+    switch (opts.style) {
+      case "ellipse":
+        drawEllipseByCenter(ctx, opts.left.x, opts.left.y, opts.width, opts.height, "black", null, 0.5);
+        drawEllipseByCenter(ctx, opts.right.x, opts.right.y, opts.width, opts.height, "black", null, 0.5);
+        break;
+      case "smiley":
+        ctx.strokeStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(opts.left.x - opts.width, opts.left.y + opts.height);
+        ctx.bezierCurveTo(opts.left.x - opts.width, opts.left.y + opts.height, opts.left.x, opts.left.y, opts.left.x + opts.width, opts.left.y + opts.height);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(opts.right.x - opts.width, opts.right.y + opts.height);
+        ctx.bezierCurveTo(opts.right.x - opts.width, opts.right.y + opts.height, opts.right.x, opts.right.y, opts.right.x + opts.width, opts.right.y + opts.height);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+        break;
+    }
 }
 
 function renderNose(ctx, opts) {
@@ -97,6 +117,7 @@ function renderNose(ctx, opts) {
   ctx.bezierCurveTo(opts.x + opts.width/2, opts.y - opts.height/2, opts.x + opts.width/2, opts.y + opts.height/2, opts.x, opts.y + opts.height/2);
   ctx.bezierCurveTo(opts.x, opts.y + opts.height/2, opts.x - opts.width/2, opts.y + opts.height/2, opts.x - opts.width/2, opts.y - opts.height/2);
     // drawEllipseByCenter(ctx, opts.x, opts.y, opts.width, opts.height, "black", null, 0.5);
+  ctx.fillStyle = "black";
   ctx.fill();
   //ctx.closePath(); // not used correctly, see comments (use to close off open path)
   ctx.stroke();
