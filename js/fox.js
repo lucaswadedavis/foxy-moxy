@@ -54,7 +54,8 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     return {
       height: eyeHeight,
       width: eyeHeight/2,
-      style: chance.pickone(['ellipse', 'smiley']),
+      style: 'ellipse',
+      // style: chance.pickone(['ellipse', 'smiley']),
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (headHeight/2) + offsetY
@@ -74,6 +75,16 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
       height: 0.03 * headWidth
     }
   }(eyes));
+
+  var mouth = (function (nose) {
+    return {
+      x: origin.x + (headWidth/2),
+      y: (nose.y + 0.15 * (origin.y + headHeight - nose.y)),
+      width: 0.08 * headWidth,
+      height: 0.04 * headWidth,
+      style: chance.pickone(['smirk', 'cat'])
+    }
+  }(nose));
 
   return {
     canvas: {
@@ -98,7 +109,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT) {
     ears: ears,
     eyes: eyes,
     nose: nose,
-    // mouth: mouth
+    mouth: mouth
   };
 };
 

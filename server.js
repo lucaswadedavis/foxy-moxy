@@ -52,6 +52,7 @@ var renderFox = function (canvas, opts) {
     // draw nose
     renderNose(ctx, opts.nose);
     // draw mouth
+    renderMouth(ctx, opts.mouth);
 };
 
 function renderHead(ctx, opts) {
@@ -116,10 +117,29 @@ function renderNose(ctx, opts) {
   ctx.bezierCurveTo(opts.x - opts.width/2, opts.y - opts.height/2, opts.x, opts.y - opts.height, opts.x + opts.width/2, opts.y - opts.height/2);
   ctx.bezierCurveTo(opts.x + opts.width/2, opts.y - opts.height/2, opts.x + opts.width/2, opts.y + opts.height/2, opts.x, opts.y + opts.height/2);
   ctx.bezierCurveTo(opts.x, opts.y + opts.height/2, opts.x - opts.width/2, opts.y + opts.height/2, opts.x - opts.width/2, opts.y - opts.height/2);
-    // drawEllipseByCenter(ctx, opts.x, opts.y, opts.width, opts.height, "black", null, 0.5);
   ctx.fillStyle = "black";
   ctx.fill();
-  //ctx.closePath(); // not used correctly, see comments (use to close off open path)
+  ctx.stroke();
+}
+
+function renderMouth(ctx, opts) {
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  switch (opts.style) {
+    case "smirk":
+      ctx.moveTo(opts.x - opts.width/2, opts.y - opts.height/2);
+      ctx.bezierCurveTo(opts.x - opts.width/2, opts.y - opts.height/2,
+        opts.x - opts.width/2, opts.y + opts.height/2,
+        opts.x + opts.width/2, opts.y
+      )
+      break;
+    case "cat":
+      ctx.moveTo(opts.x - opts.width/2, opts.y + opts.height/2);
+      ctx.lineTo(opts.x, opts.y - opts.height/2);
+      ctx.lineTo(opts.x + opts.width/2, opts.y + opts.height/2);
+      break;
+  }
   ctx.stroke();
 }
 
