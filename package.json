@@ -21,6 +21,7 @@
     "chance": "^1.0.4",
     "express": "^4.14.0",
     "node-gyp": "^3.4.0",
+    "sanitize-filename": "^1.6.1",
     "uuid": "^3.0.1"
   }
 }

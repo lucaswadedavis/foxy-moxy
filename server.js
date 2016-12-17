@@ -1,6 +1,7 @@
 var fs = require('fs');
 var express = require('express');
 var uuid = require('uuid/v4');
+var sanitize = require('sanitize-filename');
 var Canvas = require('canvas');
 
 var Fox = require('./js/fox.js');
@@ -54,9 +55,9 @@ app.get('/:width', function(req, res) {
 
 app.get('/:width/:seed', function(req, res) {
     var width = parseInt(req.params.width);
-    var seed = req.params.seed;
+    var seed = sanitize(req.params.seed);
     if (width === undefined) width = 400;
-    if (seed === undefined) seed = uuid();
+    if (!seed) seed = uuid();
     var fileName = writeFoxToDisk(width, width, seed);
     res.send('<img src="/' + fileName + '"/>');
 });
