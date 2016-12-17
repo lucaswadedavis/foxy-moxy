@@ -8,6 +8,7 @@ var Fox = require('./js/fox.js');
 var renderFox = require('./js/render-fox.js');
 
 function composeImage(width, height, seed) {
+    seed = seed || uuid();
     var fox = Fox(width, height, seed);
     var canvas = new Canvas(width, height);
     var ctx = canvas.getContext('2d');
@@ -15,10 +16,8 @@ function composeImage(width, height, seed) {
     return canvas;
 };
 
-function writeFoxToDisk (width, height, seed) {
-    if (seed === undefined) seed = uuid();
-    var canvas = composeImage(width, height, seed);
-    var fileName = "fox-" + seed + ".png";
+function writeFoxToDisk (canvas, nameSuffix) {
+    var fileName = "fox-" + nameSuffix + ".png";
     var filePath = __dirname + '/images/' + fileName;
 
     fs.writeFile(filePath, canvas.toBuffer(), function(err) {
@@ -31,7 +30,9 @@ function writeFoxToDisk (width, height, seed) {
 function writeFoxesToDisk (width, height, n=10) {
     var fileNames = [];
     for (var i = 0; i < n; i++) {
-        fileNames.push(writeFoxToDisk(width, height));
+        var seed = uuid();
+        var canvas = composeImage(width, height, seed);
+        fileNames.push(writeFoxToDisk(canvas, seed));
     }
     return fileNames;
 };
@@ -47,18 +48,18 @@ app.get('/', function(req, res) {
 });
 
 app.get('/:width', function(req, res) {
-    var width = parseInt(req.params.width);
-    if (!width) width = 400;
-    var fileName = writeFoxToDisk(width, width);
+    var width = parseInt(req.params.width) || 400;
+    var seed = uuid();
+    var canvas = composeImage(width, width, seed);
+    var fileName = writeFoxToDisk(canvas, seed);
     res.send('<img src="/' + fileName + '"/>');
 });
 
 app.get('/:width/:seed', function(req, res) {
-    var width = parseInt(req.params.width);
-    var seed = sanitize(req.params.seed);
-    if (width === undefined) width = 400;
-    if (!seed) seed = uuid();
-    var fileName = writeFoxToDisk(width, width, seed);
+    var width = parseInt(req.params.width) || 400;
+    var seed = sanitize(req.params.seed) || uuid();
+    var canvas = composeImage(width, width, seed);
+    var fileName = writeFoxToDisk(canvas, seed);
     res.send('<img src="/' + fileName + '"/>');
 });
 
