@@ -93,7 +93,7 @@ function renderNose(ctx, opts) {
 
 function renderMouth(ctx, opts) {
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 0.01 * ctx.canvas.width;
   ctx.beginPath();
   switch (opts.style) {
     case "smirk":
