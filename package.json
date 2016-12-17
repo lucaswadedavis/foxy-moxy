@@ -1,21 +1,21 @@
 {
-  "name": "icogaru",
+  "name": "foxy-moxy",
   "version": "1.0.0",
-  "description": "Iconic ============",
-  "main": "index.js",
+  "description": "Makes Fox Faces",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/lucaswadedavis/icogaru.git"
+    "url": "git+ssh://git@github.com/Patreon/foxy-moxy.git"
   },
-  "author": "",
+  "author": "Luke Davis <lucaswadedavis@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lucaswadedavis/icogaru/issues"
+    "url": "https://github.com/Patreon/foxy-moxy/issues"
   },
-  "homepage": "https://github.com/lucaswadedavis/icogaru#readme",
+  "homepage": "https://github.com/Patreon/foxy-moxy#readme",
   "dependencies": {
     "canvas": "^1.6.2",
     "chance": "^1.0.4",
