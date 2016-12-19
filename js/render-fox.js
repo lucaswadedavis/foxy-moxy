@@ -30,7 +30,7 @@ function renderHead(ctx, opts) {
     drawEllipseByCenter(ctx, 0, 0, opts.width, opts.height, opts.color, null, opts.kappa);
     ctx.restore();
     ctx.clip();
-    drawEllipseByCenter(ctx, ctx.canvas.width / 2, ctx.canvas.height, opts.maskWidth, opts.maskHeight, '#fff', '#fff', 0.5);
+    drawEllipseByCenter(ctx, ctx.canvas.width / 2, ctx.canvas.height, opts.mask.width, opts.mask.height, '#fff', '#fff', 0.5);
 }
 
 function renderEars(ctx, opts) {

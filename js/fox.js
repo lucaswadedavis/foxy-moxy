@@ -11,22 +11,25 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
     chance = new Chance();
   }
 
-  // head top left corner
-  // TODO: head headWidth and height
-  var headWidth = 0.6 * IMG_WIDTH;
-  var headHeight = 0.6 * IMG_HEIGHT;
-  var origin = {x: IMG_WIDTH / 2 - headWidth / 2, y: 0.5 * IMG_HEIGHT - headHeight / 2};
+  // origin: head top left corner
   var kappa = chance.floating({min: 0.2, max: 0.45})
 
   var hue = chance.integer({min: 5, max: 50});
   var saturation = chance.integer({min: 70, max: 90});
   var lightness = chance.integer({min: 40, max: 60});
-  var headColor = hsl(hue, saturation, lightness);
 
-  var ears = (function () {
+  var head = {
+    width: 0.6 * IMG_WIDTH,
+    height: 0.6 * IMG_HEIGHT,
+    kappa: kappa,
+    color: hsl(hue, saturation, lightness)
+  }
+
+  var origin = {x: IMG_WIDTH / 2 - head.width / 2, y: 0.5 * IMG_HEIGHT - head.height / 2};
+
+  var ears = (function (origin, headWidth, headHeight, headColor) {
     var offsetX = chance.floating({min: 0.17 * headWidth, max: 0.2 * headWidth});
     var angle = chance.floating({min: 0.05 * Math.PI, max: 0.2 * Math.PI});
-    // TODO: size
     return {
       color: headColor,
       kappa: 0.9 * kappa,
@@ -45,9 +48,9 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
         height: 0.8 * headHeight
       }
     };
-  }());
+  }(origin, head.width, head.height, head.color));
 
-  var eyes = (function () {
+  var eyes = (function (origin, headWidth, headHeight) {
     // TODO: color
     var offsetY = chance.floating({min: -0.05 * headHeight, max: -0.025 * headHeight});
     var offsetX = chance.floating({min: 0.13 * headWidth, max: 0.25 * headWidth});
@@ -68,26 +71,29 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
         y: origin.y + (headHeight/2) + offsetY
       }
     }
-  }());
+  }(origin, head.width, head.height));
 
-  var nose = (function (eyes) {
-    return {
-      x: origin.x + (headWidth/2),
-      y: (eyes.left.y + chance.floating({min: 0.2, max: 0.4}) * (origin.y + headHeight - eyes.left.y)),
-      width: chance.floating({min: 0.03, max: 0.04}) * headWidth,
-      height: chance.floating({min: 0.03, max: 0.04}) * headWidth
-    }
-  }(eyes));
+  var nose = {
+    x: origin.x + (head.width/2),
+    y: (eyes.left.y + chance.floating({min: 0.2, max: 0.4}) * (origin.y + head.height - eyes.left.y)),
+    width: chance.floating({min: 0.03, max: 0.04}) * head.width,
+    height: chance.floating({min: 0.03, max: 0.04}) * head.width
+  }
 
-  var mouth = (function (nose) {
-    return {
-      x: origin.x + (headWidth/2),
-      y: (nose.y + chance.floating({min: 0.2, max: 0.35}) * (origin.y + headHeight - nose.y)),
-      width: chance.floating({min: 0.08, max: 0.15}) * headWidth,
-      height: chance.floating({min: 0.03, max: 0.06}) * headWidth,
-      style: chance.pickone(['smirk', 'cat', 'none'])
-    }
-  }(nose));
+  var mouth = {
+    x: origin.x + (head.width/2),
+    y: (nose.y + chance.floating({min: 0.2, max: 0.35}) * (origin.y + head.height - nose.y)),
+    width: chance.floating({min: 0.08, max: 0.15}) * head.width,
+    height: chance.floating({min: 0.03, max: 0.06}) * head.width,
+    style: chance.pickone(['smirk', 'cat', 'none'])
+  }
+
+  var mask = {
+    color: hsl(hue, saturation, 95),
+    width: chance.floating({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
+    height: chance.floating({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
+  }
+  head.mask = mask;
 
   return {
     canvas: {
@@ -97,18 +103,9 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
         chance.integer({min:0, max:360}),
         chance.integer({min:0, max:100}),
         chance.integer({min:10, max:100})
-      )
+      ),
     },
-    head: {
-        origin: origin,
-        width: headWidth,
-        height: headHeight,
-        color: headColor,
-        kappa: kappa,
-        maskColor: hsl(hue, saturation, 95),
-        maskWidth: chance.floating({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
-        maskHeight: chance.floating({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
-    },
+    head: head,
     ears: ears,
     eyes: eyes,
     nose: nose,
