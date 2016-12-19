@@ -89,7 +89,6 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
   }
 
   var mask = {
-    color: hsl(hue, saturation, 95),
     width: chance.floating({min: 0.5 * IMG_WIDTH, max: IMG_WIDTH}),
     height: chance.floating({min: 1.7 * (IMG_HEIGHT - eyes.left.y), max: 1.85 * (IMG_HEIGHT - eyes.left.y)})
   }
