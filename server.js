@@ -1,3 +1,8 @@
+try {
+  const newrelic = require('newrelic');
+} catch (e) {
+  console.error("WARNING unable to load newrelic")
+}
 var fs = require('fs');
 var express = require('express');
 var uuid = require('uuid/v4');
