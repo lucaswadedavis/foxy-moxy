@@ -42,25 +42,27 @@ var app = express();
 app.use(express.static(__dirname + '/images'));
 
 app.get('/', function(req, res) {
-    var fileNames = writeFoxesToDisk(200, 200, 28);
-    var images = fileNames.map(fileName => '<img src="/' + fileName + '"/>');
-    res.send(images.join(''));
+    var width = 400;
+    var seed = uuid();
+    var canvas = composeImage(width, width, seed);
+    res.type('png');
+    res.end(canvas.toBuffer(), 'binary');
 });
 
 app.get('/:width', function(req, res) {
     var width = parseInt(req.params.width) || 400;
     var seed = uuid();
     var canvas = composeImage(width, width, seed);
-    var fileName = writeFoxToDisk(canvas, seed);
-    res.send('<img src="/' + fileName + '"/>');
+    res.type('png');
+    res.end(canvas.toBuffer(), 'binary');
 });
 
 app.get('/:width/:seed', function(req, res) {
     var width = parseInt(req.params.width) || 400;
     var seed = sanitize(req.params.seed) || uuid();
     var canvas = composeImage(width, width, seed);
-    var fileName = writeFoxToDisk(canvas, seed);
-    res.send('<img src="/' + fileName + '"/>');
+    res.type('png');
+    res.end(canvas.toBuffer(), 'binary');
 });
 
 app.listen(process.env.PORT || 3000);
