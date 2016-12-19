@@ -61,7 +61,7 @@ var Fox = function (IMG_WIDTH, IMG_HEIGHT, seed) {
       height: eyeHeight,
       width: eyeHeight/2,
       style: 'ellipse',
-      //style: chance.pickone(['ellipse', 'smiley']),
+      // style: chance.pickone(['ellipse', 'smiley']),
       left: {
         x: origin.x + (headWidth/2) - offsetX,
         y: origin.y + (headHeight/2) + offsetY

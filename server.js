@@ -51,6 +51,10 @@ app.get('/', function(req, res) {
     res.end(buffer, 'binary');
 });
 
+app.get('/healthcheck', function(req, res) {
+  res.status(200).end();
+});
+
 app.get('/:width', function(req, res) {
     var width = parseInt(req.params.width) || 400;
     var seed = uuid();
