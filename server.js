@@ -45,24 +45,30 @@ app.get('/', function(req, res) {
     var width = 400;
     var seed = uuid();
     var canvas = composeImage(width, width, seed);
+    var buffer = canvas.toBuffer();
+    res.set('Content-length', buffer.length);
     res.type('png');
-    res.end(canvas.toBuffer(), 'binary');
+    res.end(buffer, 'binary');
 });
 
 app.get('/:width', function(req, res) {
     var width = parseInt(req.params.width) || 400;
     var seed = uuid();
     var canvas = composeImage(width, width, seed);
+    var buffer = canvas.toBuffer();
+    res.set('Content-length', buffer.length);
     res.type('png');
-    res.end(canvas.toBuffer(), 'binary');
+    res.end(buffer, 'binary');
 });
 
 app.get('/:width/:seed', function(req, res) {
     var width = parseInt(req.params.width) || 400;
     var seed = sanitize(req.params.seed) || uuid();
     var canvas = composeImage(width, width, seed);
+    var buffer = canvas.toBuffer();
+    res.set('Content-length', buffer.length);
     res.type('png');
-    res.end(canvas.toBuffer(), 'binary');
+    res.end(buffer, 'binary');
 });
 
 app.listen(process.env.PORT || 3000);
