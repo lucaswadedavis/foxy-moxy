@@ -3,6 +3,7 @@ try {
 } catch (e) {
   console.error("WARNING unable to load newrelic")
 }
+
 var fs = require('fs');
 var express = require('express');
 var uuid = require('uuid/v4');
@@ -21,35 +22,12 @@ function composeImage(width, height, seed) {
     return canvas;
 };
 
-function writeFoxToDisk (canvas, nameSuffix) {
-    var fileName = "fox-" + nameSuffix + ".png";
-    var filePath = __dirname + '/images/' + fileName;
-
-    fs.writeFile(filePath, canvas.toBuffer(), function(err) {
-        if (err) console.log('error', err);
-    });
-
-    return fileName;
-};
-
-function writeFoxesToDisk (width, height, n=10) {
-    var fileNames = [];
-    for (var i = 0; i < n; i++) {
-        var seed = uuid();
-        var canvas = composeImage(width, height, seed);
-        fileNames.push(writeFoxToDisk(canvas, seed));
-    }
-    return fileNames;
-};
-
 var app = express();
-
-app.use(express.static(__dirname + '/images'));
 
 var cacheTimeout = 60 * 60 * 24 * 30;
 
 app.get('/healthcheck', function(req, res) {
-  res.status(200).end();
+    res.status(200).end();
 });
 
 app.get('/:width/:seed', function(req, res) {
