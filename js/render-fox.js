@@ -105,8 +105,15 @@ function renderMouth(ctx, opts) {
       break;
     case "cat":
       ctx.moveTo(opts.x - opts.width/2, opts.y + opts.height/2);
-      ctx.lineTo(opts.x, opts.y - opts.height/2);
-      ctx.lineTo(opts.x + opts.width/2, opts.y + opts.height/2);
+      ctx.bezierCurveTo(opts.x - opts.width/2, opts.y + opts.height/2,
+        opts.x, opts.y + opts.height/2,
+        opts.x, opts.y - opts.height/2
+      )
+      ctx.bezierCurveTo(
+        opts.x, opts.y - opts.height/2,
+        opts.x, opts.y + opts.height/2,
+        opts.x + opts.width/2, opts.y + opts.height/2
+      )
       break;
   }
   ctx.stroke();
